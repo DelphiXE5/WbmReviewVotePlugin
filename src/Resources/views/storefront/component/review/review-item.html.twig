@@ -1,0 +1,16 @@
+{% sw_extends '@Storefront/storefront/component/review/review-item.html.twig' %}
+
+{% block component_review_item_content %}
+	<p class="product-detail-review-item-content" itemprop="description">
+		{{ review.content }}
+	</p>
+
+	<div class="product-detail-review-item-vote">
+    {% if context.customer && review.customerId !== context.customer.id %}Vote{% endif %}
+        
+		{% sw_icon 'thumb-up' %}
+		20
+		{% sw_icon 'thumb-down' %}
+		40
+	</div>
+{% endblock %}
