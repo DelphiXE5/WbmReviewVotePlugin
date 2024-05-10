@@ -1,0 +1,6 @@
+{% sw_extends '@Storefront/storefront/page/product-detail/review/review-item.html.twig' %}
+{% block page_product_detail_review_item_content %}
+	{{ parent() }}
+
+	{% sw_include('@Storefront/storefront/component/review/vote/vote-item.html.twig') %}
+{% endblock %}

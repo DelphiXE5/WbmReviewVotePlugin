@@ -4,7 +4,6 @@ namespace Wbm\Core\Content\Product\SalesChannel\Review\Vote;
 
 use Shopware\Core\Checkout\Customer\CustomerEntity;
 use Shopware\Core\Content\Product\Exception\ReviewNotActiveExeption;
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -26,7 +25,6 @@ use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\IsFalse;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\NotEqualTo;
 use Wbm\Core\Content\Product\Aggregate\ProductReviewVote\ProductReviewVoteEntity;
 use Wbm\Core\Content\Product\SalesChannel\Review\Vote\AbstractProductReviewVoteSaveRoute;
 

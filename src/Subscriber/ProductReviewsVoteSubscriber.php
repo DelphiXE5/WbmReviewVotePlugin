@@ -2,7 +2,6 @@
 
 namespace Wbm\Subscriber;
 
-use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
@@ -11,7 +10,6 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Shopware\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Core\Content\Product\ProductEvents;
-use Wbm\Core\Content\Product\Aggregate\ProductReviewVote\ProductReviewVoteEntity;
 
 class ProductReviewsVoteSubscriber implements EventSubscriberInterface
 {
@@ -71,6 +69,4 @@ class ProductReviewsVoteSubscriber implements EventSubscriberInterface
         return $criteria;
     }
 
-    private function getUserVote(Context $context): ?ProductReviewVoteEntity{
-    }
 }
