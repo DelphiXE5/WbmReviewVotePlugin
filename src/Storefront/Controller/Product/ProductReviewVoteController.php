@@ -15,14 +15,11 @@ use Wbm\Core\Content\Product\SalesChannel\Review\Vote\AbstractProductReviewVoteS
 #[Route(defaults: ['_routeScope' => ['storefront']])]
 class ProductReviewVoteController extends StorefrontController
 {
-
-
     public function __construct(
         private readonly EntityRepository $productReviewsVoteRepository,
         private readonly AbstractProductReviewVoteSaveRoute $productReviewSaveVoteRoute,
     ) {
     }
-
 
     #[Route(path: '/product/review/{reviewId}/rating', name: 'frontend.detail.review.vote.save', defaults: ['XmlHttpRequest' => true, '_loginRequired' => true], methods: ['POST'])]
     public function saveReviewVote(string $reviewId, RequestDataBag $data, SalesChannelContext $context): Response

@@ -1,11 +1,11 @@
 {% block component_vote_item %}
 	<div class="product-detail-review-item-vote">
-		{# {% if context.customer && review.customerId !== context.customer.id %} #}
+		{% if context.customer && review.customerId !== context.customer.id %}
 			{% block component_vote_item_votable %}
 				{% sw_include('@Storefront/storefront/component/review/vote/vote-item-form.html.twig') with {positiveReview: 1}%}
 				{% sw_include('@Storefront/storefront/component/review/vote/vote-item-form.html.twig') with {positiveReview: 0}%}
 			{% endblock %}
-		{# {% else %}
+		{% else %}
 			{% block component_vote_item_not_votable %}
 				<div class="product-detail-review-item-vote-item">
 					<span>{{review.getExtension('votes').get('positive')}}</span>
@@ -20,6 +20,6 @@
 					</div>
 				</div>
 			{% endblock %}
-		{% endif %} #}
+		{% endif %}
 	</div>
 {% endblock %}
