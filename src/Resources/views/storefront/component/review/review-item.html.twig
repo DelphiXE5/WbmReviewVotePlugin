@@ -1,16 +1,58 @@
 {% sw_extends '@Storefront/storefront/component/review/review-item.html.twig' %}
 
 {% block component_review_item_content %}
-	<p class="product-detail-review-item-content" itemprop="description">
-		{{ review.content }}
-	</p>
+	{{ parent() }}
 
-	<div class="product-detail-review-item-vote">
-    {% if context.customer && review.customerId !== context.customer.id %}Vote{% endif %}
-        
-		{% sw_icon 'thumb-up' %}
-		20
-		{% sw_icon 'thumb-down' %}
-		40
+	{% set formAjaxSubmitOptions = {
+        replaceSelectors: '.js-review-container'
+    } %}
+
+	<div
+		class="product-detail-review-item-vote" style="display: flex; align-items: center; gap: 0.5rem;">
+		{# {% if context.customer && review.customerId !== context.customer.id %} #}
+		<div style="display: flex; align-items: center; gap: 0.25rem;">
+			<span>{{review.getExtension('votes').get('positive')}}</span>
+			<form class="vote-form" action="{{ path('frontend.detail.review.vote.save', { reviewId: review.id }) }}" method="post" data-form-validation="true" data-form-ajax-submit="true" data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
+				{% block component_review_form_forward_thumbs_up %}
+					<input type="hidden" name="forwardTo" value="frontend.product.reviews">
+
+					<input type="hidden" name="parentId" value="{{ reviews.parentId }}">
+
+					<input type="hidden"
+                       name="forwardParameters"
+                       value="{{ {productId: review.productId}|json_encode }}">
+
+                    <input type="hidden" name="positiveReview" value="{{ 1 }}">
+				{% endblock %}
+				{% block component_review_form_thumbs_up %}
+					<button type="submit" class="btn" style="background-color:transparent; padding: 0" data-form-submit="true" data-form-submit-name="vote" data-form-submit-value="1">
+						{% sw_icon 'thumb-up' %}
+					</button>
+				{% endblock %}
+			</form>
+		</div>
+
+		<div style="display: flex; align-items: center; gap: 0.25rem;">
+			<span>{{review.getExtension('votes').get('negative')}}</span>
+			<form class="vote-form" action="{{ path('frontend.detail.review.vote.save', { reviewId: review.id }) }}" method="post" data-form-validation="true" data-form-ajax-submit="true" data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
+				{% block component_review_form_forward_thumbs_down %}
+					<input type="hidden" name="forwardTo" value="frontend.product.reviews">
+
+					<input type="hidden" name="parentId" value="{{ reviews.parentId }}">
+
+					<input type="hidden"
+                       name="forwardParameters"
+                       value="{{ {productId: review.productId}|json_encode }}">
+
+                    <input type="hidden" name="positiveReview" value="{{ 0 }}">
+				{% endblock %}
+				{% block component_review_form_thumbs_down %}
+					<button type="submit" class="btn" style="background-color:transparent; padding:0" data-form-submit="true" data-form-submit-name="vote" data-form-submit-value="1">
+						{% sw_icon 'thumb-down' %}
+					</button>
+				{% endblock %}
+			</form>
+		</div>
+		{# {% endif %} #}
 	</div>
 {% endblock %}

@@ -35,7 +35,7 @@ class ProductReviewVoteEntity extends Entity
     /**
      * @var bool|null
      */
-    protected $positivReview;
+    protected $positiveReview;
 
     /**
      * @var ProductReviewEntity|null
@@ -102,14 +102,14 @@ class ProductReviewVoteEntity extends Entity
         $this->salesChannelId = $salesChannelId;
     }
 
-    public function getPositivReview(): ?bool
+    public function getpositiveReview(): ?bool
     {
-        return $this->positivReview;
+        return $this->positiveReview;
     }
 
-    public function setPositivReview(?bool $positivReview): void
+    public function setpositiveReview(?bool $positiveReview): void
     {
-        $this->positivReview = $positivReview;
+        $this->positiveReview = $positiveReview;
     }
 
     public function getProductReview(): ?ProductReviewEntity

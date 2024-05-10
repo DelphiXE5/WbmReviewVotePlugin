@@ -20,7 +20,7 @@ class Migration1715011084ProductReviewVote extends MigrationStep
                 product_review_id BINARY(16) NOT NULL, 
                 customer_id BINARY(16) DEFAULT NULL, 
                 sales_channel_id BINARY(16) NOT NULL, 
-                positiv_review TINYINT(1) DEFAULT 0, 
+                positive_review TINYINT(1) DEFAULT 0, 
                 created_at DATETIME NOT NULL, 
                 updated_at DATETIME DEFAULT NULL, 
                 PRIMARY KEY(id)) 
@@ -32,6 +32,10 @@ SQL;
 
     public function updateDestructive(Connection $connection): void
     {
-        // Add destructive update if necessary
+        $query = <<<'SQL'
+            DROP TABLE product_review_vote;
+SQL;
+
+        $connection->executeStatement($query);
     }
 }

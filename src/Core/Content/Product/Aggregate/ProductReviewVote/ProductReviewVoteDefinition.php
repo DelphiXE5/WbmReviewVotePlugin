@@ -46,7 +46,7 @@ class ProductReviewVoteDefinition extends EntityDefinition
             (new FkField('product_review_id', 'productReviewId', ProductReviewDefinition::class))->addFlags(new ApiAware(), new Required()),
             new FkField('customer_id', 'customerId', CustomerDefinition::class),
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new ApiAware(), new Required()),
-            (new BoolField('positiv_review', 'positivReview'))->addFlags(new ApiAware()),
+            (new BoolField('positive_review', 'positiveReview'))->addFlags(new ApiAware()),
             (new ManyToOneAssociationField('productReview', 'product_review_id', ProductReviewDefinition::class, 'id', false)),
             (new ManyToOneAssociationField('customer', 'customer_id', CustomerDefinition::class, 'id', false)),
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false),

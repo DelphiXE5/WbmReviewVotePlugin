@@ -18,6 +18,6 @@ class ProductReviewVoteCollection extends EntityCollection
 {
     protected function getExpectedClass(): string
     {
-        return ArrayEntity::class;
+        return ProductReviewVoteEntity::class;
     }
 }
