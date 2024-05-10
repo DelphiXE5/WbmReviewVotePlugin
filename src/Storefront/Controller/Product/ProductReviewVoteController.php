@@ -32,6 +32,7 @@ class ProductReviewVoteController extends StorefrontController
         try {
             $this->productReviewSaveVoteRoute->save($reviewId, $data, $context);
         } catch (ConstraintViolationException $formViolations) {
+            dd($formViolations);
             return $this->forwardToRoute('frontend.product.reviews', [
                 'productId' => $productId,
                 'success' => -1,

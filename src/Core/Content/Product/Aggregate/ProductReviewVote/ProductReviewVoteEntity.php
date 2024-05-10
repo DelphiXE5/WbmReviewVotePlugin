@@ -102,7 +102,7 @@ class ProductReviewVoteEntity extends Entity
         $this->salesChannelId = $salesChannelId;
     }
 
-    public function getpositiveReview(): ?bool
+    public function getPositiveReview(): ?bool
     {
         return $this->positiveReview;
     }

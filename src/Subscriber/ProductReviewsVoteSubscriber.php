@@ -31,8 +31,6 @@ class ProductReviewsVoteSubscriber implements EventSubscriberInterface
 
     public function onProductReviewLoaded(EntityLoadedEvent $event)
     {
-
-        dd($event->getContext()->getSource());
         $reviewIds = array_unique(array_column($event->getEntities(), 'id'));
         $votes = $this->productReviewsVoteRepository->search($this->createCriteria($reviewIds), $event->getContext());
         foreach ($event->getEntities() as $reviewEntity) {

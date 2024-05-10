@@ -26,6 +26,7 @@ use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\Constraints\IsFalse;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\NotEqualTo;
 use Wbm\Core\Content\Product\Aggregate\ProductReviewVote\ProductReviewVoteEntity;
 use Wbm\Core\Content\Product\SalesChannel\Review\Vote\AbstractProductReviewVoteSaveRoute;
 
@@ -37,7 +38,8 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
      * @internal
      */
     public function __construct(
-        private readonly EntityRepository $repository,
+        private readonly EntityRepository $productReviewVoteRepository,
+        private readonly EntityRepository $productReviewRepository,
         private readonly DataValidator $validator,
         private readonly SystemConfigService $config
     ) {
@@ -72,7 +74,10 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
             $data->set('id', $existingEntity->getId());
         }
 
-        $this->validate($data, $context->getContext());
+        $this->validate($data, $context);
+        if (!$this->checkUserPermisson($data, $context)) {
+            return new NoContentResponse();
+        }
 
         $review = [
             'customerId' => $data->get('customerId'),
@@ -85,16 +90,25 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
             $review['id'] = $data->get('id');
         }
 
-        $this->repository->upsert([$review], $context->getContext());
+        $this->productReviewVoteRepository->upsert([$review], $context->getContext());
 
         return new NoContentResponse();
     }
 
-    private function validate(DataBag $data, Context $context): void
+    private function checkUserPermisson(DataBag $data, SalesChannelContext $context): bool {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('id', $data->get('productReviewId')));
+        $criteria->addFilter(new EqualsFilter('customerId', $data->get('customerId')));
+
+        return $this->productReviewRepository->search($criteria, $context->getContext())->getEntities()->first() == null;
+    }
+
+    private function validate(DataBag $data, SalesChannelContext $context): void
     {
         $definition = new DataValidationDefinition('review.create_vote');
 
         $definition->add('productReviewId', new NotBlank());
+
         $definition->add('positiveReview', new AtLeastOneOf([new Blank(), new IsTrue(), new IsFalse()]));
 
         if ($data->get('id')) {
@@ -103,7 +117,7 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
 
             $definition->add('id', new EntityExists([
                 'entity' => 'product_review_vote',
-                'context' => $context,
+                'context' => $context->getContext(),
                 'criteria' => $criteria,
             ]));
         } else {
@@ -112,9 +126,9 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
             $criteria->addFilter(new EqualsFilter('salesChannelId', $data->get('salesChannelId')));
             $criteria->addFilter(new EqualsFilter('productReviewId', $data->get('productReviewId')));
 
-            $definition->add('customerId', new EntityNotExists([
+            $definition->add('productReviewId', new EntityNotExists([
                 'entity' => 'product_review_vote',
-                'context' => $context,
+                'context' => $context->getContext(),
                 'criteria' => $criteria,
             ]));
         }
@@ -142,12 +156,13 @@ class ProductReviewVoteSaveRoute extends AbstractProductReviewVoteSaveRoute
         }
     }
 
-    private function checkReviewVoteExists(string $salesChannelId, string $customerId, string $reviewId, SalesChannelContext $context): ?ProductReviewVoteEntity {
+    private function checkReviewVoteExists(string $salesChannelId, string $customerId, string $reviewId, SalesChannelContext $context): ?ProductReviewVoteEntity
+    {
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('salesChannelId', $salesChannelId));
         $criteria->addFilter(new EqualsFilter('customerId', $customerId));
         $criteria->addFilter(new EqualsFilter('productReviewId', $reviewId));
 
-        return $this->repository->search($criteria, $context->getContext())->getEntities()->first();
+        return $this->productReviewVoteRepository->search($criteria, $context->getContext())->getEntities()->first();
     }
 }

@@ -1,3 +1,31 @@
-body {
+.product-detail-vote-form-button-user-vote svg {
+    color: #0b539b;
+}
 
+.product-detail-review-item-vote-item svg {
+    color: lightgray;
+}
+
+.product-detail-review-item-vote {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+.product-detail-review-item-vote-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.product-detail-vote-form-button {
+    background-color: transparent;
+    padding: 0;
+}
+
+.product-detail-vote-form-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
 }
