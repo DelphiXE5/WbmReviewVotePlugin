@@ -26,9 +26,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
-            <call method="setTwig">
-                <argument type="service" id="twig" />
-            </call>
             <argument type="service" id="product_review_vote.repository" />
             <argument type="service" id="Wbm\Core\Content\Product\SalesChannel\Review\Vote\ProductReviewVoteSaveRoute" />
         </service>

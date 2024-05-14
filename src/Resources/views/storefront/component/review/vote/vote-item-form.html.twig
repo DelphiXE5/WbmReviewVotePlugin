@@ -1,38 +1,40 @@
-{% if positiveReview == 1 %}
-	{% set icon = 'thumb-up' %}
-	{% set extensionName = 'positive' %}
-{% else %}
-	{% set icon = 'thumb-down' %}
-	{% set extensionName = 'negative' %}
-{% endif %}
-
-{% set formAjaxSubmitOptions = {
-        replaceSelectors: '.js-review-container'
-    } 
-%}
-{% set userVote = review.getExtension('votes').get('user') == positiveReview and review.getExtension('votes').get('user') !== null %}
-
-
 {% block component_vote_item_form %}
-	<div class="product-detail-vote-form-wrapper">
-		<span>{{review.getExtension('votes').get(extensionName)}}</span>
-		<form class="product-detail-vote-form" action="{{ path('frontend.detail.review.vote.save', { reviewId: review.id }) }}" method="post" data-form-validation="true" data-form-ajax-submit="true" data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
-			{% block component_vote_item_form_forward %}
-				<input type="hidden" name="forwardTo" value="frontend.product.reviews">
 
-				<input type="hidden" name="parentId" value="{{ reviews.parentId }}">
+	{% if positiveReview == 1 %}
+		{% set icon = 'thumb-up' %}
+		{% set extensionName = 'positive' %}
+	{% else %}
+		{% set icon = 'thumb-down' %}
+		{% set extensionName = 'negative' %}
+	{% endif %}
 
-				<input type="hidden" name="forwardParameters" value="{{ {productId: review.productId}|json_encode }}">
+	{% set formAjaxSubmitOptions = {
+        replaceSelectors: '.js-review-container'
+    } %}
 
-				{% if not userVote %}
-					<input type="hidden" name="positiveReview" value="{{ positiveReview }}">
-				{% endif %}
-			{% endblock %}
-			{% block component_vote_item_form_submit %}
-				<button type="submit" class="btn product-detail-vote-form-button {% if userVote %} product-detail-vote-form-button-user-vote {% endif %}" data-form-submit="true" data-form-submit-name="vote" data-form-submit-value="1">
-					{% sw_include "@Storefront/storefront/utilities/icon.html.twig" with {'name': icon} %}
-				</button>
-			{% endblock %}
-		</form>
-	</div>
+	{% set userVote = review.getExtension('votes').get('user') == positiveReview and review.getExtension('votes').get('user') !== null %}
+
+	{% block component_vote_item_form_content %}
+		<div class="product-detail-vote-form-wrapper">
+			<span>{{review.getExtension('votes').get(extensionName)}}</span>
+			<form class="product-detail-vote-form" action="{{ path('frontend.detail.review.vote.save', { reviewId: review.id }) }}" method="post" data-form-validation="true" data-form-ajax-submit="true" data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
+				{% block component_vote_item_form_arguments %}
+					<input type="hidden" name="forwardTo" value="frontend.product.reviews">
+
+					<input type="hidden" name="parentId" value="{{ reviews.parentId }}">
+
+					<input type="hidden" name="forwardParameters" value="{{ {productId: review.productId}|json_encode }}">
+
+					{% if not userVote %}
+						<input type="hidden" name="positiveReview" value="{{ positiveReview }}">
+					{% endif %}
+				{% endblock %}
+				{% block component_vote_item_form_submit %}
+					<button type="submit" class="btn product-detail-vote-form-button {% if userVote %} product-detail-vote-form-button-active {% endif %}" data-form-submit="true">
+						{% sw_include "@Storefront/storefront/utilities/icon.html.twig" with {'name': icon} %}
+					</button>
+				{% endblock %}
+			</form>
+		</div>
+	{% endblock %}
 {% endblock %}

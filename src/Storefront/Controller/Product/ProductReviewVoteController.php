@@ -24,12 +24,12 @@ class ProductReviewVoteController extends StorefrontController
     #[Route(path: '/product/review/{reviewId}/rating', name: 'frontend.detail.review.vote.save', defaults: ['XmlHttpRequest' => true, '_loginRequired' => true], methods: ['POST'])]
     public function saveReviewVote(string $reviewId, RequestDataBag $data, SalesChannelContext $context): Response
     {
-        $productId = json_decode($data->get('forwardParameters'), true)['productId'];
+        $forwardParams = json_decode($data->get('forwardParameters'), true);
+        $productId = array_key_exists('productId', $forwardParams) ? $forwardParams['productId'] : '';
 
         try {
             $this->productReviewSaveVoteRoute->save($reviewId, $data, $context);
         } catch (ConstraintViolationException $formViolations) {
-            dd($formViolations);
             return $this->forwardToRoute('frontend.product.reviews', [
                 'productId' => $productId,
                 'success' => -1,

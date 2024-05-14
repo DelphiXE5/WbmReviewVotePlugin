@@ -34,7 +34,9 @@ class ProductReviewsVoteSubscriber implements EventSubscriberInterface
         foreach ($event->getEntities() as $reviewEntity) {
             // retrieving the review bucket for the current review
             $reviewBucketList = array_filter($votes->getAggregations()->get('review')->getBuckets(), fn($bucket) => $bucket->getKey() == $reviewEntity->getId());
+            // If there are no votes, return and set both values to 0 
             if (count($reviewBucketList) == 0) {
+                $reviewEntity->addExtension('votes', new ArrayEntity(['positive' => 0, 'negative' => 0]));
                 return;
             }
             $reviewBucket = array_pop($reviewBucketList);
